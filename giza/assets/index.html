@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Giza Creativo</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+
+<section id="inicio" class="pantalla">
+  <div class="cielo-inicio">
+    <div class="sol"></div>
+    <svg class="siluetas" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <polygon points="80,300 330,95 580,300" fill="#c79a5c"/>
+      <polygon points="330,95 580,300 420,300" fill="#a87b45"/>
+      <polygon points="470,300 690,110 910,300" fill="#d4a868"/>
+      <polygon points="690,110 910,300 770,300" fill="#b08349"/>
+      <polygon points="676,123 704,123 690,110" fill="#efe0bf"/>
+      <polygon points="860,300 975,195 1090,300" fill="#c39657"/>
+      <polygon points="975,195 1090,300 1010,300" fill="#9f743f"/>
+      <rect x="0" y="292" width="1200" height="8" fill="#b88b52"/>
+    </svg>
+  </div>
+  <div class="inicio-contenido">
+    <h1>Giza <span>Creativo</span></h1>
+    <p class="lema">Las pirámides a escala 1:1, bloque por bloque, y el catálogo completo de bloques de Minecraft.</p>
+    <div class="inicio-botones">
+      <button class="btn grande primario" id="btnJugar"><span>▶</span> Explorar Giza</button>
+      <button class="btn grande" id="btnCatalogo"><span>▦</span> Catálogo de bloques</button>
+    </div>
+    <ul class="datos">
+      <li><b>3 × 3 km</b> de meseta, desierto y valle del Nilo</li>
+      <li><b>9 pirámides</b>, la Esfinge, templos, calzadas y mastabas</li>
+      <li><b>Por dentro:</b> pasadizos, Gran Galería y Cámara del Rey</li>
+      <li><b id="cuentaBloques">873</b> bloques con sus características</li>
+    </ul>
+  </div>
+</section>
+
+<section id="juego" class="pantalla" hidden>
+  <canvas id="lienzo"></canvas>
+  <div id="zonaTactil"></div>
+  <div class="mira" aria-hidden="true"></div>
+
+  <div class="hud-info" id="hudInfo">
+    <b id="hudLugar">Meseta de Giza</b>
+    <span id="hudCoords"></span>
+  </div>
+  <div class="hud-botones">
+    <button class="hud-btn" id="btnLugares" title="Lugares">📍<span>Lugares</span></button>
+    <button class="hud-btn" id="btnBloques" title="Bloques">▦<span>Bloques</span></button>
+    <button class="hud-btn" id="btnAjustes" title="Ajustes">⚙<span>Ajustes</span></button>
+    <button class="hud-btn" id="btnMenu" title="Menú">☰</button>
+  </div>
+
+  <div class="carga" id="carga"><div class="carga-barra"><i id="cargaBarra"></i></div><span id="cargaTexto">Construyendo Giza…</span></div>
+
+  <div class="controles-der">
+    <button class="ctl" id="ctlSubir" aria-label="Subir">▲</button>
+    <button class="ctl" id="ctlBajar" aria-label="Bajar">▼</button>
+  </div>
+  <div class="controles-modo">
+    <button class="ctl chico" id="ctlVolar" title="Volar o caminar">🕊</button>
+    <button class="ctl chico" id="ctlAtravesar" title="Atravesar paredes">👻</button>
+    <button class="ctl chico" id="ctlTurbo" title="Velocidad">⏩</button>
+    <button class="ctl chico" id="ctlCopiar" title="Copiar el bloque apuntado">💧</button>
+  </div>
+  <div class="ayuda-toque" id="ayudaToque">Toca para <b>poner</b> · mantén para <b>quitar</b></div>
+
+  <div class="barra" id="barra"></div>
+  <div class="joy" id="joy"><i></i></div>
+  <div class="aviso" id="aviso"></div>
+
+  <div class="panel" id="panelLugares" hidden>
+    <div class="panel-cabeza"><b>Lugares</b><button class="icono-btn" data-cerrar>✕</button></div>
+    <div class="lista-lugares" id="listaLugares"></div>
+  </div>
+
+  <div class="panel" id="panelAjustes" hidden>
+    <div class="panel-cabeza"><b>Ajustes</b><button class="icono-btn" data-cerrar>✕</button></div>
+    <div class="ajustes">
+      <label>Distancia de visión <output id="vRadio"></output><input type="range" id="aRadio" min="6" max="24" step="1"></label>
+      <label>Resolución <output id="vCalidad"></output><input type="range" id="aCalidad" min="0.6" max="2" step="0.1"></label>
+      <label>Sensibilidad al mirar <output id="vSens"></output><input type="range" id="aSens" min="0.3" max="2.5" step="0.1"></label>
+      <label>Campo de visión <output id="vFov"></output><input type="range" id="aFov" min="55" max="100" step="1"></label>
+      <label>Hora del día <output id="vDia"></output><input type="range" id="aDia" min="0.35" max="1" step="0.05"></label>
+      <label class="fila"><input type="checkbox" id="aVolar"> Volar</label>
+      <label class="fila"><input type="checkbox" id="aAtravesar"> Atravesar paredes</label>
+      <div class="ajustes-acciones">
+        <button class="btn" id="btnBorrar">Borrar mis construcciones</button>
+      </div>
+      <p class="pie" id="pieInfo"></p>
+    </div>
+  </div>
+</section>
+
+<section id="catalogo" class="pantalla catalogo" hidden></section>
+
+<div class="velo" id="velo" hidden>
+  <div class="dialogo">
+    <h3 id="dTitulo"></h3>
+    <p id="dTexto"></p>
+    <div class="dialogo-acciones"><button class="btn" id="dNo">Cancelar</button><button class="btn primario" id="dSi">Aceptar</button></div>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
